@@ -14,7 +14,6 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Check if user already exists
     const existingUser = await prisma.user.findUnique({
       where: { email }
     });
@@ -26,10 +25,8 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Hash password
     const hashedPassword = await bcrypt.hash(password, 12);
 
-    // Create user
     const user = await prisma.user.create({
       data: {
         email,
@@ -39,7 +36,6 @@ export async function POST(request: NextRequest) {
       }
     });
 
-    // Create JWT token
     const token = jwt.sign(
       { 
         userId: user.id, 
@@ -50,7 +46,6 @@ export async function POST(request: NextRequest) {
       { expiresIn: '7d' }
     );
 
-    // Return user data and token
     return NextResponse.json({
       user: {
         id: user.id,

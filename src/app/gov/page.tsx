@@ -10,7 +10,6 @@ interface GovernmentDashboardProps {
   onBack: () => void
 }
 
-// Mock data for government analytics
 const mockLivestockData = [
   {
     id: 1,
@@ -142,7 +141,6 @@ const breedDistribution = [
   { breed: "Holstein", count: 1, percentage: 3 },
 ]
 
-// Custom SVG map component to replace Leaflet
 const IndiaMap = ({ data }: { data: typeof mockLivestockData }) => {
   const [selectedState, setSelectedState] = useState<string | null>(null)
 
@@ -163,7 +161,7 @@ const IndiaMap = ({ data }: { data: typeof mockLivestockData }) => {
   return (
     <div className="relative">
       <svg viewBox="0 0 800 600" className="w-full h-96 border rounded-lg bg-blue-50">
-        {/* Simplified India outline */}
+ 
         <path
           d="M200 100 L600 100 L650 200 L600 500 L200 500 L150 200 Z"
           fill="#e5e7eb"
@@ -171,7 +169,6 @@ const IndiaMap = ({ data }: { data: typeof mockLivestockData }) => {
           strokeWidth="2"
         />
 
-        {/* State regions */}
         <g>
           {/* Gujarat */}
           <rect
@@ -278,7 +275,6 @@ const IndiaMap = ({ data }: { data: typeof mockLivestockData }) => {
           </text>
         </g>
 
-        {/* Data points */}
         {data.map((item) => {
           const x =
             item.state === "Gujarat"
@@ -324,7 +320,6 @@ const IndiaMap = ({ data }: { data: typeof mockLivestockData }) => {
         })}
       </svg>
 
-      {/* Legend */}
       <div className="mt-4 grid grid-cols-2 md:grid-cols-4 gap-2 text-sm">
         {Object.entries(stateColors).map(([state, color]) => (
           <div key={state} className="flex items-center gap-2">
@@ -354,7 +349,6 @@ const IndiaMap = ({ data }: { data: typeof mockLivestockData }) => {
   )
 }
 
-// Map Visualization Component
 const MapVisualization = () => {
   const Map = useMemo(() => dynamic(
     () => import('@/components/Map'),
@@ -364,7 +358,6 @@ const MapVisualization = () => {
     }
   ), [])
 
-  // Animal records with breed information
   function getRandomOffset() {
     return (Math.random()) * 0.3;
   }
@@ -413,36 +406,31 @@ const MapVisualization = () => {
   const [filterBreed, setFilterBreed] = useState<string>("All")
   const [filterDistrict, setFilterDistrict] = useState<string>("All")
 
-  // Get unique breeds and districts for filters
   const allBreeds = Array.from(new Set(districtData.map(animal => animal.breed))).sort()
   const allDistricts = Array.from(new Set(districtData.map(animal => animal.district))).sort()
 
-  // Filter animals based on selected breed and district
   const filteredAnimals = districtData.filter(animal =>
     (filterBreed === "All" || animal.breed === filterBreed) &&
     (filterDistrict === "All" || animal.district === filterDistrict)
   )
 
-  // Breed colors for consistent coloring
   const breedColors: { [key: string]: string } = {
-    "Gir": "#3B82F6", // Blue
-    "Murrah": "#10B981", // Green
-    "Sahiwal": "#F59E0B", // Amber
-    "Nili-Ravi": "#8B5CF6", // Purple
-    "Jaffarabadi": "#EF4444", // Red
-    "Holstein": "#06B6D4", // Cyan
+    "Gir": "#3B82F6", 
+    "Murrah": "#10B981", 
+    "Sahiwal": "#F59E0B", 
+    "Nili-Ravi": "#8B5CF6", 
+    "Jaffarabadi": "#EF4444", 
+    "Holstein": "#06B6D4", 
   }
 
   return (
     <div className="flex h-full">
-      {/* Enhanced Filter Sidebar */}
       <div className="w-80 bg-gradient-to-b from-white to-blue-50 border-r border-blue-200 p-6 shadow-lg">
         <div className="mb-6">
           <h3 className="text-xl font-bold text-blue-800 mb-2">Filter by Breed & Region</h3>
           <p className="text-sm text-blue-600">Select breed and district to filter livestock data on the map</p>
         </div>
         
-        {/* District Filter */}
         <div className="mb-6">
           <h4 className="font-semibold text-blue-700 mb-3">Select District</h4>
           <select 
@@ -457,7 +445,6 @@ const MapVisualization = () => {
           </select>
         </div>
         
-        {/* Breed Filter */}
         <div className="mb-6">
           <h4 className="font-semibold text-blue-700 mb-3">Select Breed</h4>
           <select 
@@ -472,7 +459,6 @@ const MapVisualization = () => {
           </select>
         </div>
         
-        {/* Breed Legend */}
         <div className="mb-6">
           <h4 className="font-semibold text-blue-700 mb-3">Breed Legend</h4>
           <div className="space-y-2">
@@ -488,7 +474,6 @@ const MapVisualization = () => {
           </div>
         </div>
         
-        {/* Stats Summary */}
         <div className="mt-8 p-4 bg-blue-50 rounded-xl">
           <h4 className="font-semibold text-blue-800 mb-3">Summary</h4>
           <div className="space-y-2 text-sm">
@@ -512,7 +497,6 @@ const MapVisualization = () => {
         </div>
       </div>
       
-      {/* Map Container */}
       <div className="flex-1 relative">
         <Map animals={filteredAnimals} breedColors={breedColors} />
       </div>
@@ -527,15 +511,14 @@ export default function GovernmentDashboard({ onBack }: GovernmentDashboardProps
     setIsMapLoaded(true)
   }, [])
 
-  // Calculate totals
   const totalAnimals = 38
-  const totalOwners = 13  // Mock data for total owners
-  const totalCattleBreeds = 3 // Mock data for total cattle breeds
-  const totalBuffaloBreeds = 3 // Mock data for total buffalo breeds
+  const totalOwners = 13
+  const totalCattleBreeds = 3
+  const totalBuffaloBreeds = 3
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-blue-100 to-blue-200">
-      {/* Enhanced Header */}
+  
       <header className="bg-white/90 backdrop-blur-md shadow-xl border-b-4 border-[#145378] sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 py-6">
           <div className="flex items-center justify-between">
@@ -553,7 +536,7 @@ export default function GovernmentDashboard({ onBack }: GovernmentDashboardProps
       </header>
 
       <div className="max-w-7xl mx-auto px-4 py-6">
-        {/* Enhanced Overview Stats */}
+  
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
           <Card className="group bg-gradient-to-br from-[#145378] to-[#145378] text-white hover:shadow-2xl border-0">
             <CardContent className="p-6">
@@ -617,7 +600,7 @@ export default function GovernmentDashboard({ onBack }: GovernmentDashboardProps
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {/* Enhanced Map Visualization */}
+  
           <Card className="lg:col-span-2 bg-white/80 backdrop-blur-sm shadow-2xl border-0 overflow-hidden">
             <CardHeader className="bg-gradient-to-r from-[#145378] to-[#145378] text-white">
               <CardTitle className="flex items-center gap-3 text-white text-2xl">
@@ -635,7 +618,6 @@ export default function GovernmentDashboard({ onBack }: GovernmentDashboardProps
             </CardContent>
           </Card>
 
-          {/* Region-wise Cattle Breeds */}
           <Card className="bg-white/80 backdrop-blur-sm shadow-xl border-0 hover:shadow-2xl transition-all duration-300">
             <CardHeader className="bg-[#145378] text-white">
               <CardTitle className="flex items-center gap-3 text-white text-xl">
@@ -676,7 +658,6 @@ export default function GovernmentDashboard({ onBack }: GovernmentDashboardProps
             </CardContent>
           </Card>
 
-          {/* Enhanced Breed Distribution */}
           <Card className="bg-white/80 backdrop-blur-sm shadow-xl border-0 hover:shadow-2xl transition-all duration-300">
             <CardHeader className="bg-[#145378] text-white">
               <CardTitle className="flex items-center gap-3 text-white text-xl">
@@ -710,7 +691,6 @@ export default function GovernmentDashboard({ onBack }: GovernmentDashboardProps
           </Card>
         </div>
 
-        {/* Enhanced Additional Insights */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-8">
           <Card className="group bg-white/80 backdrop-blur-sm shadow-xl border-0 hover:shadow-2xl transition-all duration-300 transform hover:scale-105">
             <CardHeader className="bg-[#145378] text-white">

@@ -12,7 +12,6 @@ interface OwnerDashboardProps {
   onBack: () => void
 }
 
-// Mock data for demonstration
 const mockAnimals = [
   {
     id: "AN001",
@@ -304,7 +303,7 @@ export default function OwnerDashboard({ onBack }: OwnerDashboardProps) {
 
   const handleLogin = () => {
     if (aadhaarNumber.length === 14) {
-      // Format: 1234-5678-9012
+      // 1234-5678-9012
       setIsLoggedIn(true)
     }
   }

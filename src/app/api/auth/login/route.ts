@@ -14,7 +14,6 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Find user in database
     const user = await prisma.user.findUnique({
       where: { email }
     });
@@ -26,7 +25,6 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Verify password
     const isValidPassword = await bcrypt.compare(password, user.password);
 
     if (!isValidPassword) {
@@ -36,7 +34,6 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Create JWT token
     const token = jwt.sign(
       { 
         userId: user.id, 
@@ -47,7 +44,6 @@ export async function POST(request: NextRequest) {
       { expiresIn: '7d' }
     );
 
-    // Return user data and token
     return NextResponse.json({
       user: {
         id: user.id,

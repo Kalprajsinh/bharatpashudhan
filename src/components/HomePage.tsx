@@ -3,7 +3,6 @@
 import React, { useState } from 'react';
 import { Plus, Syringe, Heart, AlertCircle, LogOut, X } from 'lucide-react';
 
-// User interface
 interface User {
   id: string;
   email: string;
@@ -11,7 +10,6 @@ interface User {
   role: string;
 }
 
-// Modal types
 type ModalType = 'animalRegistration' | 'vaccination' | 'breeding' | 'healthIssue' | null;
 
 interface HomePageProps {
@@ -22,7 +20,6 @@ interface HomePageProps {
 export default function HomePage({ user, onLogout }: HomePageProps) {
   const [activeModal, setActiveModal] = useState<ModalType>(null);
   
-  // Form states
   const [animalRegistration, setAnimalRegistration] = useState<{
     breed: string;
     gender: string;
@@ -103,7 +100,6 @@ export default function HomePage({ user, onLogout }: HomePageProps) {
     notes: ''
   });
 
-  // Card data
   const cards: Array<{
     title: string;
     description: string;
@@ -141,14 +137,11 @@ export default function HomePage({ user, onLogout }: HomePageProps) {
     },
   ];
 
-  // Handle form submissions
   const handleSubmit = (formType: ModalType) => {
     console.log(`Submitting ${formType} form`);
-    // Here you would typically send data to your backend
     setActiveModal(null);
   };
 
-  // Handle file upload
   const handleFileUpload = (
     e: React.ChangeEvent<HTMLInputElement>,
     setter: React.Dispatch<React.SetStateAction<any>>,
@@ -160,8 +153,6 @@ export default function HomePage({ user, onLogout }: HomePageProps) {
     }
   };
 
-  // Render the appropriate modal based on activeModal state
-  // Modal styling (no transition)
   const modalAnim = "";
 
   const renderModal = () => {
