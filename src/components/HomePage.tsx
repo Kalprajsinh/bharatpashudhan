@@ -142,14 +142,18 @@ export default function HomePage({ user, onLogout }: HomePageProps) {
     setActiveModal(null);
   };
 
+  type AnimalRegistrationType = Record<string, File | string | number | undefined>;
+  type VaccinationType = Record<string, File | string | number | undefined>;
+  type BreedingType = Record<string, File | string | number | undefined>;
+
   const handleFileUpload = (
     e: React.ChangeEvent<HTMLInputElement>,
-    setter: React.Dispatch<React.SetStateAction<any>>,
+    setter: React.Dispatch<React.SetStateAction<AnimalRegistrationType | VaccinationType | BreedingType>>,
     field: string
   ) => {
     const file = e.target.files?.[0];
     if (file) {
-      setter((prev: any) => ({ ...prev, [field]: file }));
+      setter((prev) => ({ ...prev, [field]: file }));
     }
   };
 

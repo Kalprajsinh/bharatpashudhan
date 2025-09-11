@@ -6,8 +6,8 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
 
 export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className = "", variant = "default", ...props }, ref) => {
-    let base = "px-4 py-2 rounded-md font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 ";
-    let variants: Record<string, string> = {
+  const base = "px-4 py-2 rounded-md font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 ";
+  const variants: Record<string, string> = {
       default: "bg-blue-600 text-white hover:bg-blue-700",
       outline: "border border-blue-600 text-blue-600 bg-white hover:bg-blue-50",
       ghost: "bg-transparent text-blue-600 hover:bg-blue-50",
