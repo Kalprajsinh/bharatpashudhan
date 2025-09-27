@@ -1,0 +1,13 @@
+train: ../train/images
+val: ../valid/images
+test: ../test/images
+
+nc: 1
+names: ['Breed']
+
+roboflow:
+  workspace: project-6l1fs
+  project: detection-99gcs
+  version: 2
+  license: CC BY 4.0
+  url: https://universe.roboflow.com/project-6l1fs/detection-99gcs/dataset/2
