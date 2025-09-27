@@ -24,7 +24,7 @@ const mockLivestockData = [
   {
     id: 2,
     species: "Buffalo",
-    breed: "Murrah",
+    breed: "Banni",
     lat: 28.7041,
     lng: 77.1025,
     district: "Delhi",
@@ -34,7 +34,7 @@ const mockLivestockData = [
   {
     id: 3,
     species: "Cow",
-    breed: "Sahiwal",
+    breed: "Kankrej",
     lat: 26.9124,
     lng: 75.7873,
     district: "Jaipur",
@@ -54,7 +54,7 @@ const mockLivestockData = [
   {
     id: 5,
     species: "Cow",
-    breed: "Holstein",
+    breed: "Kankrej",
     lat: 19.076,
     lng: 72.8777,
     district: "Mumbai",
@@ -64,81 +64,50 @@ const mockLivestockData = [
   {
     id: 6,
     species: "Buffalo",
-    breed: "Nili-Ravi",
+    breed: "Banni",
     lat: 30.7333,
     lng: 76.7794,
     district: "Chandigarh",
     state: "Punjab",
     owner: "Harpreet Singh",
   },
-  {
-    id: 7,
-    species: "Cow",
-    breed: "Gir",
-    lat: 13.0827,
-    lng: 80.2707,
-    district: "Chennai",
-    state: "Tamil Nadu",
-    owner: "Rajesh Kumar",
-  },
-  {
-    id: 8,
-    species: "Cow",
-    breed: "Sahiwal",
-    lat: 22.5726,
-    lng: 88.3639,
-    district: "Kolkata",
-    state: "West Bengal",
-    owner: "Amit Das",
-  },
+  // {
+  //   id: 7,
+  //   species: "Cow",
+  //   breed: "Gir",
+  //   lat: 13.0827,
+  //   lng: 80.2707,
+  //   district: "Chennai",
+  //   state: "Tamil Nadu",
+  //   owner: "Rajesh Kumar",
+  // },
+  // {
+  //   id: 8,
+  //   species: "Cow",
+  //   breed: "Sahiwal",
+  //   lat: 22.5726,
+  //   lng: 88.3639,
+  //   district: "Kolkata",
+  //   state: "West Bengal",
+  //   owner: "Amit Das",
+  // },
 ]
 
 const regionStats = [
   { 
     state: "Gujarat", 
-    totalAnimals: 38, 
-    cows: 25, 
-    buffaloes: 13, 
-    gir: 16, 
-    murrah: 9, 
-    sahiwal: 8,
-    niliRavi: 2,
-    jaffarabadi: 2,
-    holstein: 1
-  },
-  { 
-    state: "Punjab", 
-    totalAnimals: 0, 
-    cows: 0, 
-    buffaloes: 0, 
-    gir: 0, 
-    murrah: 0, 
-    sahiwal: 0,
-    niliRavi: 0,
-    jaffarabadi: 0,
-    holstein: 0
-  },
-  { 
-    state: "Rajasthan", 
-    totalAnimals: 0, 
-    cows: 0, 
-    buffaloes: 0, 
-    gir: 0, 
-    murrah: 0, 
-    sahiwal: 0,
-    niliRavi: 0,
-    jaffarabadi: 0,
-    holstein: 0
+    totalAnimals: 32, 
+    cows: 20, 
+    Banni: 12, 
+    gir: 11, 
+    Kankrej: 9, 
   },
 ]
 
 const breedDistribution = [
   { breed: "Gir", count: 16, percentage: 42 },
-  { breed: "Murrah", count: 9, percentage: 24 },
-  { breed: "Sahiwal", count: 8, percentage: 21 },
-  { breed: "Nili-Ravi", count: 2, percentage: 5 },
-  { breed: "Jaffarabadi", count: 2, percentage: 5 },
-  { breed: "Holstein", count: 1, percentage: 3 },
+  { breed: "Kankrej", count: 9, percentage: 24 },
+  { breed: "Banni", count: 13, percentage: 34 },
 ]
 
 const IndiaMap = ({ data }: { data: typeof mockLivestockData }) => {
@@ -364,43 +333,42 @@ const MapVisualization = () => {
 
   const districtData: { district: string, position: [number, number], breed: string }[] = [
     { district: "AHMADABAD", position: [23.0225 + getRandomOffset(), 72.5714 + getRandomOffset()], breed: "Gir" },
-    { district: "AHMADABAD", position: [23.0225 + getRandomOffset(), 72.5714 + getRandomOffset()], breed: "Murrah" },
-    { district: "AHMADABAD", position: [23.0225 + getRandomOffset(), 72.5714 + getRandomOffset()], breed: "Sahiwal" },
+    { district: "AHMADABAD", position: [23.0225 + getRandomOffset(), 72.5714 + getRandomOffset()], breed: "Kankrej" },
+    { district: "AHMADABAD", position: [23.0225 + getRandomOffset(), 72.5714 + getRandomOffset()], breed: "Banni" },
     { district: "AHMADABAD", position: [23.0225 + getRandomOffset(), 72.5714 + getRandomOffset()], breed: "Gir" },
-    { district: "AHMADABAD", position: [23.0225 + getRandomOffset(), 72.5714 + getRandomOffset()], breed: "Murrah" },
-    { district: "AHMADABAD", position: [23.0225 + getRandomOffset(), 72.5714 + getRandomOffset()], breed: "Nili-Ravi" },
+    { district: "AHMADABAD", position: [23.0225 + getRandomOffset(), 72.5714 + getRandomOffset()], breed: "Kankrej" },
+    { district: "AHMADABAD", position: [23.0225 + getRandomOffset(), 72.5714 + getRandomOffset()], breed: "Banni" },
 
     { district: "PANCH MAHALS", position: [23.0535 + getRandomOffset(), 73.6042 + getRandomOffset()], breed: "Gir" },
+    { district: "PANCH MAHALS", position: [23.0535 + getRandomOffset(), 73.6042 + getRandomOffset()], breed: "Kankrej" },
+    { district: "PANCH MAHALS", position: [23.0535 + getRandomOffset(), 73.6042 + getRandomOffset()], breed: "Banni" },
     { district: "PANCH MAHALS", position: [23.0535 + getRandomOffset(), 73.6042 + getRandomOffset()], breed: "Gir" },
-    { district: "PANCH MAHALS", position: [23.0535 + getRandomOffset(), 73.6042 + getRandomOffset()], breed: "Sahiwal" },
-    { district: "PANCH MAHALS", position: [23.0535 + getRandomOffset(), 73.6042 + getRandomOffset()], breed: "Murrah" },
+    { district: "PANCH MAHALS", position: [23.0535 + getRandomOffset(), 73.6042 + getRandomOffset()], breed: "Kankrej" },
+    { district: "PANCH MAHALS", position: [23.0535 + getRandomOffset(), 73.6042 + getRandomOffset()], breed: "Banni" },
     { district: "PANCH MAHALS", position: [23.0535 + getRandomOffset(), 73.6042 + getRandomOffset()], breed: "Gir" },
-    { district: "PANCH MAHALS", position: [23.0535 + getRandomOffset(), 73.6042 + getRandomOffset()], breed: "Jaffarabadi" },
-    { district: "PANCH MAHALS", position: [23.0535 + getRandomOffset(), 73.6042 + getRandomOffset()], breed: "Sahiwal" },
-    { district: "PANCH MAHALS", position: [23.0535 + getRandomOffset(), 73.6042 + getRandomOffset()], breed: "Gir" },
-    { district: "PANCH MAHALS", position: [23.0535 + getRandomOffset(), 73.6042 + getRandomOffset()], breed: "Murrah" },
+    { district: "PANCH MAHALS", position: [23.0535 + getRandomOffset(), 73.6042 + getRandomOffset()], breed: "Kankrej" },
+    { district: "PANCH MAHALS", position: [23.0535 + getRandomOffset(), 73.6042 + getRandomOffset()], breed: "Banni" },
 
     { district: "SURAT", position: [21.1702 + getRandomOffset(), 72.8311 + getRandomOffset()], breed: "Gir" },
-    { district: "SURAT", position: [21.1702 + getRandomOffset(), 72.8311 + getRandomOffset()], breed: "Murrah" },
+    { district: "SURAT", position: [21.1702 + getRandomOffset(), 72.8311 + getRandomOffset()], breed: "Kankrej" },
+    { district: "SURAT", position: [21.1702 + getRandomOffset(), 72.8311 + getRandomOffset()], breed: "Banni" },
     { district: "SURAT", position: [21.1702 + getRandomOffset(), 72.8311 + getRandomOffset()], breed: "Gir" },
-    { district: "SURAT", position: [21.1702 + getRandomOffset(), 72.8311 + getRandomOffset()], breed: "Sahiwal" },
-    { district: "SURAT", position: [21.1702 + getRandomOffset(), 72.8311 + getRandomOffset()], breed: "Nili-Ravi" },
+    { district: "SURAT", position: [21.1702 + getRandomOffset(), 72.8311 + getRandomOffset()], breed: "Kankrej" },
+    { district: "SURAT", position: [21.1702 + getRandomOffset(), 72.8311 + getRandomOffset()], breed: "Banni" },
     { district: "SURAT", position: [21.1702 + getRandomOffset(), 72.8311 + getRandomOffset()], breed: "Gir" },
-    { district: "SURAT", position: [21.1702 + getRandomOffset(), 72.8311 + getRandomOffset()], breed: "Murrah" },
-    { district: "SURAT", position: [21.1702 + getRandomOffset(), 72.8311 + getRandomOffset()], breed: "Gir" },
-    { district: "SURAT", position: [21.1702 + getRandomOffset(), 72.8311 + getRandomOffset()], breed: "Jaffarabadi" },
-    { district: "SURAT", position: [21.1702 + getRandomOffset(), 72.8311 + getRandomOffset()], breed: "Sahiwal" },
-    { district: "SURAT", position: [21.1702 + getRandomOffset(), 72.8311 + getRandomOffset()], breed: "Gir" },
-    { district: "SURAT", position: [21.1702 + getRandomOffset(), 72.8311 + getRandomOffset()], breed: "Murrah" },
+    { district: "SURAT", position: [21.1702 + getRandomOffset(), 72.8311 + getRandomOffset()], breed: "Kankrej" },
+    { district: "SURAT", position: [21.1702 + getRandomOffset(), 72.8311 + getRandomOffset()], breed: "Banni" },
 
     { district: "VADODARA", position: [22.3072 + getRandomOffset(), 73.1812 + getRandomOffset()], breed: "Gir" },
-    { district: "VADODARA", position: [22.3072 + getRandomOffset(), 73.1812 + getRandomOffset()], breed: "Sahiwal" },
+    { district: "VADODARA", position: [22.3072 + getRandomOffset(), 73.1812 + getRandomOffset()], breed: "Kankrej" },
+    { district: "VADODARA", position: [22.3072 + getRandomOffset(), 73.1812 + getRandomOffset()], breed: "Banni" },
     { district: "VADODARA", position: [22.3072 + getRandomOffset(), 73.1812 + getRandomOffset()], breed: "Gir" },
-    { district: "VADODARA", position: [22.3072 + getRandomOffset(), 73.1812 + getRandomOffset()], breed: "Murrah" },
+    { district: "VADODARA", position: [22.3072 + getRandomOffset(), 73.1812 + getRandomOffset()], breed: "Kankrej" },
+    { district: "VADODARA", position: [22.3072 + getRandomOffset(), 73.1812 + getRandomOffset()], breed: "Banni" },
 
     { district: "BHARUCH", position: [21.7051 + getRandomOffset(), 73.0635 + getRandomOffset()], breed: "Gir" },
-    { district: "BHARUCH", position: [21.7051 + getRandomOffset(), 73.0635 + getRandomOffset()], breed: "Sahiwal" },
-    { district: "BHARUCH", position: [21.7051 + getRandomOffset(), 73.0635 + getRandomOffset()], breed: "Murrah" }
+    { district: "BHARUCH", position: [21.7051 + getRandomOffset(), 73.0635 + getRandomOffset()], breed: "Kankrej" },
+    { district: "BHARUCH", position: [21.7051 + getRandomOffset(), 73.0635 + getRandomOffset()], breed: "Banni" }
   ];
 
   const [filterBreed, setFilterBreed] = useState<string>("All")
@@ -415,12 +383,9 @@ const MapVisualization = () => {
   )
 
   const breedColors: { [key: string]: string } = {
-    "Gir": "#3B82F6", 
-    "Murrah": "#10B981", 
-    "Sahiwal": "#F59E0B", 
-    "Nili-Ravi": "#8B5CF6", 
-    "Jaffarabadi": "#EF4444", 
-    "Holstein": "#06B6D4", 
+    "Gir": "#0000ff", 
+    "Kankrej": "#0000ff",
+    "Banni": "#0000ff",
   }
 
   return (
@@ -474,7 +439,7 @@ const MapVisualization = () => {
           </div>
         </div>
         
-        <div className="mt-8 p-4 bg-blue-50 rounded-xl">
+        {/* <div className="mt-8 p-4 bg-blue-50 rounded-xl">
           <h4 className="font-semibold text-blue-800 mb-3">Summary</h4>
           <div className="space-y-2 text-sm">
             <div className="flex justify-between">
@@ -494,7 +459,7 @@ const MapVisualization = () => {
               </span>
             </div>
           </div>
-        </div>
+        </div> */}
       </div>
       
       <div className="flex-1 relative">
@@ -511,10 +476,8 @@ export default function GovernmentDashboard({ onBack }: GovernmentDashboardProps
     setIsMapLoaded(true)
   }, [])
 
-  const totalAnimals = 38
-  const totalOwners = 13
-  const totalCattleBreeds = 3
-  const totalBuffaloBreeds = 3
+  const totalAnimals = 32
+  const totalOwners = 18
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-blue-100 to-blue-200">
@@ -573,8 +536,8 @@ export default function GovernmentDashboard({ onBack }: GovernmentDashboardProps
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-blue-100 text-sm font-semibold mb-1">Cattle Breeds</p>
-                  <p className="text-3xl font-bold">{totalCattleBreeds}</p>
-                  <p className="text-blue-200 text-xs mt-1">Gir, Sahiwal, Holstein</p>
+                  <p className="text-3xl font-bold">3</p>
+                  <p className="text-blue-200 text-xs mt-1">Gir, Deshi, Kankrej</p>
                 </div>
                 <div className="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
                   <BarChart3 className="w-8 h-8 text-white" />
@@ -588,8 +551,8 @@ export default function GovernmentDashboard({ onBack }: GovernmentDashboardProps
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-blue-100 text-sm font-semibold mb-1">Buffalo Breeds</p>
-                  <p className="text-3xl font-bold">{totalBuffaloBreeds}</p>
-                  <p className="text-blue-200 text-xs mt-1">Murrah, Nili-Ravi, Jaffarabadi</p>
+                  <p className="text-3xl font-bold">2</p>
+                  <p className="text-blue-200 text-xs mt-1">Banni, Deshi</p>
                 </div>
                 <div className="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
                   <BarChart3 className="w-8 h-8 text-white" />
@@ -642,13 +605,10 @@ export default function GovernmentDashboard({ onBack }: GovernmentDashboardProps
                         <p className="text-[#145378] text-xs font-medium mb-1">Gir</p>
                         <p className="font-bold text-[#145378] text-lg">{region.gir.toLocaleString()}</p>
                       </div>
-                      <div className="text-center p-3 bg-blue-50 rounded-xl">
-                        <p className="text-[#145378] text-xs font-medium mb-1">Sahiwal</p>
-                        <p className="font-bold text-[#145378] text-lg">{region.sahiwal.toLocaleString()}</p>
-                      </div>
+                      
                       <div className="text-center p-3 bg-blue-50 rounded-xl">
                         <p className="text-[#145378] text-xs font-medium mb-1">Other</p>
-                        <p className="font-bold text-[#145378] text-lg">{(region.cows - region.gir - region.sahiwal).toLocaleString()}</p>
+                        <p className="font-bold text-[#145378] text-lg">{(region.cows - region.gir).toLocaleString()}</p>
                       </div>
                     </div>
                     {index < regionStats.length - 1 && <div className="border-b border-blue-200 mt-4"></div>}
@@ -724,16 +684,16 @@ export default function GovernmentDashboard({ onBack }: GovernmentDashboardProps
             </CardHeader>
             <CardContent className="p-6">
               <div className="text-center">
-                <div className="text-4xl font-bold text-[#145378] mb-2 group-hover:scale-110 transition-transform duration-300">142</div>
+                <div className="text-4xl font-bold text-[#145378] mb-2 group-hover:scale-110 transition-transform duration-300">14</div>
                 <p className="text-sm text-[#145378] mb-4">Cases this month</p>
                 <div className="grid grid-cols-2 gap-4 text-xs">
                   <div className="bg-blue-50 p-3 rounded-lg">
                     <p className="text-[#145378] font-semibold">Resolved</p>
-                    <p className="text-[#145378] text-lg font-bold">128</p>
+                    <p className="text-[#145378] text-lg font-bold">12</p>
                   </div>
                   <div className="bg-blue-50 p-3 rounded-lg">
                     <p className="text-[#145378] font-semibold">Pending</p>
-                    <p className="text-[#145378] text-lg font-bold">14</p>
+                    <p className="text-[#145378] text-lg font-bold">2</p>
                   </div>
                 </div>
                 <p className="text-xs text-[#145378] mt-2 font-semibold">-12% from last month</p>

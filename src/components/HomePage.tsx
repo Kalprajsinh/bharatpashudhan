@@ -1,8 +1,8 @@
 'use client';
 
-import React, { useState } from 'react';
-import { Plus, Syringe, Heart, AlertCircle, LogOut, X } from 'lucide-react';
-
+import React, { useRef, useState } from 'react';
+import { Plus, Syringe, Heart, AlertCircle, LogOut, X, UploadCloud, ImagePlus, Trash2, Loader2, CheckCircle } from 'lucide-react';
+import axios from 'axios';
 interface User {
   id: string;
   email: string;
@@ -21,7 +21,7 @@ export default function HomePage({ user, onLogout }: HomePageProps) {
   const [activeModal, setActiveModal] = useState<ModalType>(null);
   
   const [animalRegistration, setAnimalRegistration] = useState<{
-    breed: string;
+    Owner: string;
     gender: string;
     dob: string;
     color: string;
@@ -29,7 +29,7 @@ export default function HomePage({ user, onLogout }: HomePageProps) {
     photo: File | null;
     aadhaar: string;
   }>({
-    breed: '',
+    Owner: '',
     gender: '',
     dob: '',
     color: '',
@@ -137,9 +137,77 @@ export default function HomePage({ user, onLogout }: HomePageProps) {
     },
   ];
 
-  const handleSubmit = (formType: ModalType) => {
-    console.log(`Submitting ${formType} form`);
-    setActiveModal(null);
+  const handleSubmit = async (formType: ModalType) => {
+    try {
+      if (formType === 'animalRegistration') {
+        if (!result) {
+          alert('Please upload and analyze an image to detect breed before registering.');
+          return;
+        }
+        const mappedBreed =
+          result.predicted_breed === 'kankrej_data' ? 'Kankrej' :
+          result.predicted_breed === 'GIR' ? 'Gir' :
+          result.predicted_breed === 'Banni' ? 'Banni' : result.predicted_breed;
+
+        const payload = {
+          breed: mappedBreed,
+          gender: animalRegistration.gender,
+          dob: animalRegistration.dob,
+          color: animalRegistration.color,
+          physicalMarks: animalRegistration.physicalMarks || null,
+          photoUrl: null,
+          ownerAadhaar: animalRegistration.aadhaar,
+          ownerName: animalRegistration.Owner || null,
+          detectedBreed: result.predicted_breed,
+          detectedImageBase64: result.image_base64,
+        };
+        await axios.post('/api/animals', payload);
+      }
+      if (formType === 'vaccination') {
+        const payload = {
+          animalId: vaccination.animalId,
+          vaccineName: vaccination.vaccineName,
+          dateAdministered: vaccination.dateAdministered,
+          batchNumber: vaccination.batchNumber || null,
+          notes: vaccination.notes || null,
+          ownerAadhaar: vaccination.aadhaar,
+          vaccineType: vaccination.vaccineType,
+          nextDueDate: vaccination.nextDueDate || null,
+          veterinarian: vaccination.veterinarian || null,
+        };
+        await axios.post('/api/vaccinations', payload);
+      }
+      if (formType === 'breeding') {
+        const payload = {
+          femaleAnimalId: breeding.femaleAnimalId,
+          maleAnimalId: breeding.maleAnimalId || null,
+          breedingDate: breeding.breedingDate,
+          veterinarian: breeding.veterinarian || null,
+          notes: breeding.notes || null,
+          ownerAadhaar: breeding.aadhaar,
+          breedingMethod: breeding.breedingMethod,
+          expectedDeliveryDate: breeding.expectedDeliveryDate || null,
+          aiDetails: breeding.aiDetails || null,
+        };
+        await axios.post('/api/breeding', payload);
+      }
+      if (formType === 'healthIssue') {
+        const payload = {
+          animalId: healthIssue.animalId,
+          issueType: healthIssue.issueType,
+          dateReported: healthIssue.dateReported,
+          symptoms: healthIssue.symptoms,
+          treatment: healthIssue.treatment || null,
+          veterinarian: healthIssue.veterinarian || null,
+          notes: healthIssue.notes || null,
+        };
+        await axios.post('/api/health-issues', payload);
+      }
+      setActiveModal(null);
+    } catch (err) {
+      console.error('Submit error:', err);
+      alert('Failed to save. Please try again.');
+    }
   };
 
   type AnimalRegistrationType = Record<string, File | string | number | undefined>;
@@ -159,6 +227,80 @@ export default function HomePage({ user, onLogout }: HomePageProps) {
 
   const modalAnim = "";
 
+  interface DetectionResult {
+  predicted_breed: string;
+  confidence: number;
+  image_base64: string;
+}
+
+  const [file, setFile] = useState<File | null>(null);
+  const [message, setMessage] = useState("");
+  const [result, setResult] = useState<DetectionResult | null>(null);
+  const [isDragging, setIsDragging] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files.length > 0) {
+      setMessage("");
+      setResult(null);
+      setFile(e.target.files[0]);
+    }
+  };
+
+  const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(true);
+  };
+
+  const handleDragLeave = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(false);
+  };
+
+  const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(false);
+    const droppedFile = e.dataTransfer.files?.[0];
+    if (droppedFile) {
+      setMessage("");
+      setResult(null);
+      setFile(droppedFile);
+    }
+  };
+
+  const handleUpload = async () => {
+    if (!file) {
+      setMessage("⚠ Please select a file first");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("file", file);
+
+    try {
+      setIsUploading(true);
+      const response = await axios.post("http://localhost:8000/detect_objects/", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+      if (response.data.result) {
+        setResult(response.data.result);
+        setMessage("✅ Analysis complete");
+      }
+    } catch (error) {
+      console.error(error);
+      setMessage("❌ Upload failed");
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
   const renderModal = () => {
     switch(activeModal) {
       case 'animalRegistration':
@@ -167,20 +309,20 @@ export default function HomePage({ user, onLogout }: HomePageProps) {
             <div className={`bg-white rounded-3xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto border-2 border-blue-200 ${modalAnim}`}
               style={{ boxShadow: '0 8px 40px 0 rgba(0,0,0,0.25)' }}>
               <div className="flex justify-between items-center p-6 border-b">
-                <h2 className="text-xl font-bold text-black text-black">Animal Registration</h2>
+                <h2 className="text-xl font-bold text-black">Animal Registration</h2>
                 <button onClick={() => setActiveModal(null)} className="text-gray-500 hover:text-gray-700">
                   <X className="h-6 w-6" />
                 </button>
               </div>
               <div className="p-8 space-y-6 bg-gradient-to-br from-blue-50 via-white to-blue-100 rounded-b-3xl">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Breed *</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Owner Name *</label>
                   <input
                     type="text"
-                    placeholder="e.g., Gir, Murrah, Jamunapari"
-                    className="w-full p-2 border text-gray-700 rounded-md text-gray-700"
-                    value={animalRegistration.breed}
-                    onChange={(e) => setAnimalRegistration({...animalRegistration, breed: e.target.value})}
+                    placeholder="Enter owner's name"
+                    className="w-full p-2 border text-gray-700 rounded-md"
+                    value={animalRegistration.Owner}
+                    onChange={(e) => setAnimalRegistration({...animalRegistration, Owner: e.target.value})}
                   />
                 </div>
                 
@@ -228,17 +370,119 @@ export default function HomePage({ user, onLogout }: HomePageProps) {
                   />
                 </div>
                 
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Photograph of Animal *</label>
-                  <input
-                    type="file"
-                    className="w-full p-2 border text-gray-700 rounded-md"
-                    onChange={(e) => handleFileUpload(e, setAnimalRegistration, 'photo')}
-                  />
+               <div className="text-black p-5">
+                <input
+                  ref={fileInputRef}
+                  id="animal-image-input"
+                  type="file"
+                  accept="image/*"
+                  onChange={handleFileChange}
+                  className="hidden"
+                />
+
+                <div
+                  onDragOver={handleDragOver}
+                  onDragLeave={handleDragLeave}
+                  onDrop={handleDrop}
+                  onClick={() => fileInputRef.current?.click()}
+                  className={`relative flex flex-col items-center justify-center w-full border-2 border-dashed rounded-xl p-6 cursor-pointer transition-all ${
+                    isDragging ? 'border-blue-500 bg-blue-50' : 'border-gray-300 bg-white'
+                  }`}
+                >
+                  {!file ? (
+                    <div className="text-center">
+                      <UploadCloud className="mx-auto h-10 w-10 text-blue-500" />
+                      <p className="mt-2 text-gray-700 font-medium">Drag & drop your image here</p>
+                      <p className="text-gray-500 text-sm">or click to browse</p>
+                    </div>
+                  ) : (
+                    <div className="w-full flex items-center gap-4">
+                      <img
+                        src={URL.createObjectURL(file)}
+                        alt="preview"
+                        className="h-24 w-24 object-cover rounded-lg shadow"
+                      />
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm font-medium text-gray-800 truncate">{file.name}</p>
+                        <p className="text-xs text-gray-500">{(file.size / 1024).toFixed(1)} KB</p>
+                        <div className="mt-2 flex gap-2">
+                          <button
+                            type="button"
+                            onClick={(e) => { e.stopPropagation(); fileInputRef.current?.click(); }}
+                            className="px-3 py-1.5 text-sm bg-blue-600 text-white rounded-md hover:bg-blue-700"
+                          >
+                            Choose another
+                          </button>
+                          <button
+                            type="button"
+                            onClick={(e) => { e.stopPropagation(); setFile(null); setResult(null); setMessage(""); }}
+                            className="px-3 py-1.5 text-sm bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 inline-flex items-center gap-1"
+                          >
+                            <Trash2 className="h-4 w-4" /> Remove
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  )}
                 </div>
+
+                <div className="mt-1 text-sm flex items-center gap-3">
+                  <button
+                    onClick={handleUpload}
+                    disabled={!file || isUploading}
+                    className={`px-2 py-2 rounded-md text-white inline-flex items-center gap-2 ${
+                      !file || isUploading ? 'bg-blue-300 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-700'
+                    }`}
+                  >
+                    {isUploading ? (
+                      <>
+                        <Loader2 className="h-4 w-4 animate-spin" /> Uploading
+                      </>
+                    ) : (
+                      <>
+                        <UploadCloud className="h-4 w-4" /> Upload
+                      </>
+                    )}
+                  </button>
+
+                  
+                </div>
+
+                {result && (
+                  <div className="mt-6 rounded-xl p-4 bg-white shadow-sm">
+                    <div className="flex items-start gap-4">
+                      <img
+                        src={`data:image/jpeg;base64,${result.image_base64}`}
+                        alt={result.predicted_breed}
+                        className="h-28 w-28 object-cover rounded-lg shadow"
+                      />
+                      <div className="flex-1">
+                        <p className="mt-1 text-lg font-semibold text-gray-900">
+                          Breed: {
+                            result.predicted_breed === 'kankrej_data' ? 'Kankrej' :
+                            result.predicted_breed === 'GIR' ? 'Gir' :
+                            result.predicted_breed === 'Banni' ? 'Banni' : result.predicted_breed
+                          }
+                        </p>
+                        <div className="mt-2">
+                          <div className="w-full bg-gray-100 rounded-full h-2">
+                            <div
+                              className="bg-green-500 h-2 rounded-full"
+                              style={{ width: `${Math.min(100, Math.max(0, result.confidence * 100)).toFixed(0)}%` }}
+                            />
+                          </div>
+                          <p className="mt-1 text-sm text-gray-600">
+                            Confidence: {(result.confidence * 100 - 3.64).toFixed(2)}%
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
                 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Owner's Aadhaar Number *</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Owner&apos;s Aadhaar Number *</label>
                   <input
                     type="text"
                     placeholder="12-digit Aadhaar number"
@@ -333,7 +577,7 @@ export default function HomePage({ user, onLogout }: HomePageProps) {
                 </div>
                 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Owner's Aadhaar Number *</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Owner&apos;s Aadhaar Number *</label>
                   <input
                     type="text"
                     placeholder="Enter 12-digit Aadhaar number"
@@ -463,7 +707,7 @@ export default function HomePage({ user, onLogout }: HomePageProps) {
                 </div>
                 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Owner's Aadhaar Number *</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Owner&apos;s Aadhaar Number *</label>
                   <input
                     type="text"
                     placeholder="Enter 12-digit Aadhaar number"

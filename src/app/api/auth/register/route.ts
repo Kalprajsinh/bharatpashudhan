@@ -2,11 +2,10 @@ import { NextRequest, NextResponse } from 'next/server';
 import bcrypt from 'bcryptjs';
 import { prisma } from '@/lib/prisma';
 import jwt from 'jsonwebtoken';
-import { Role } from '@prisma/client';
 
 export async function POST(request: NextRequest) {
   try {
-  const { email, password, name, role = 'USER' } = await request.json();
+    const { email, password, name, role = 'USER' } = await request.json();
 
     if (!email || !password) {
       return NextResponse.json(
@@ -33,7 +32,7 @@ export async function POST(request: NextRequest) {
         email,
         password: hashedPassword,
         name,
-  role: role as Role
+        role: role as any
       }
     });
 

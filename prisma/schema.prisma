@@ -28,3 +28,82 @@ enum Role {
   GOVERNMENT_OFFICIAL
   USER
 }
+
+model Animal {
+  id             String   @id @default(cuid())
+  ownerAadhaar   String
+  ownerName      String?
+  breed          String
+  gender         String
+  dob            DateTime
+  color          String
+  physicalMarks  String?
+  photoUrl       String?
+  detectedBreed        String?
+  detectedImageBase64  String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  vaccinations   Vaccination[]
+  breedingAsFemale BreedingRecord[] @relation("FemaleAnimal")
+  breedingAsMale   BreedingRecord[] @relation("MaleAnimal")
+  healthIssues     HealthIssue[]
+
+  @@map("animals")
+}
+
+model Vaccination {
+  id               String   @id @default(cuid())
+  animalId         String
+  vaccineName      String
+  dateAdministered DateTime
+  batchNumber      String?
+  notes            String?
+  ownerAadhaar     String
+  vaccineType      String
+  nextDueDate      DateTime?
+  veterinarian     String?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  animal           Animal   @relation(fields: [animalId], references: [id])
+
+  @@map("vaccinations")
+}
+
+model BreedingRecord {
+  id                   String   @id @default(cuid())
+  femaleAnimalId       String
+  maleAnimalId         String?
+  breedingDate         DateTime
+  veterinarian         String?
+  notes                String?
+  ownerAadhaar         String
+  breedingMethod       String
+  expectedDeliveryDate DateTime?
+  aiDetails            String?
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+
+  femaleAnimal         Animal   @relation("FemaleAnimal", fields: [femaleAnimalId], references: [id])
+  maleAnimal           Animal?  @relation("MaleAnimal", fields: [maleAnimalId], references: [id])
+
+  @@map("breeding_records")
+}
+
+model HealthIssue {
+  id           String   @id @default(cuid())
+  animalId     String
+  issueType    String
+  dateReported DateTime
+  symptoms     String
+  treatment    String?
+  veterinarian String?
+  notes        String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  animal       Animal   @relation(fields: [animalId], references: [id])
+
+  @@map("health_issues")
+}

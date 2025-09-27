@@ -364,7 +364,7 @@ export default function OwnerDashboard({ onBack }: OwnerDashboardProps) {
               <p className="text-blue-700 text-sm mb-6">Access your livestock dashboard</p>
             </div>
             <CardContent className="space-y-6 px-8 pb-10 pt-0 bg-gradient-to-br from-blue-50 via-white to-blue-100 rounded-b-3xl">
-              <div>
+              <div className="text-black placeholder:text-gray-500">
                 <Label htmlFor="aadhaar">Aadhaar Number</Label>
                 <Input
                   id="aadhaar"
